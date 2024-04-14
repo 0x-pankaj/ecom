@@ -1,0 +1,21 @@
+version: '3.1'
+
+services:
+  db: 
+    image: mysql
+    restart: always
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD= secret
+    container_name: ecom-mysql-database
+    volumes:
+      - db_data:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+volumes:
+  db_data: 
