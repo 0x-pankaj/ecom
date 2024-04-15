@@ -12,8 +12,9 @@ import (
 )
 
 func main() {
-	fmt.Printf("%s", config.Envs.DBUser)
-	println("hello")
+	fmt.Printf(" %s\n", config.Envs.DBPassword)
+	password := config.Envs.DBPassword
+	println(password)
 
 	db, err := db.NewSQLStorage(mysql.Config{
 		User:                 config.Envs.DBUser,
