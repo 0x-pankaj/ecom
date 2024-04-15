@@ -1,6 +1,8 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
 	"log"
 
 	"github.com/0x-pankaj/ecom/cmd/api"
@@ -10,6 +12,8 @@ import (
 )
 
 func main() {
+	fmt.Printf("%s", config.Envs.DBUser)
+	println("hello")
 
 	db, err := db.NewSQLStorage(mysql.Config{
 		User:                 config.Envs.DBUser,
@@ -21,13 +25,33 @@ func main() {
 		ParseTime:            true,
 	})
 
+	// db, err := db.NewSQLStorage(mysql.Config{
+	// 	User:                 "root",
+	// 	Passwd:               "secret",
+	// 	Addr:                 "http://localhost:3306",
+	// 	DBName:               "ecom",
+	// 	Net:                  "tcp",
+	// 	AllowNativePasswords: true,
+	// 	ParseTime:            true,
+	// })
 	if err != nil {
 		log.Fatal("Error in db config: ", err)
+
 	}
 
-	server := api.NewAPIServer(":9090", db)
+	initStorage(db)
 
+	server := api.NewAPIServer(fmt.Sprintf(":%s", config.Envs.Port), db)
 	if err := server.Run(); err != nil {
-		log.Fatal("Error while running server: ", err)
+		log.Fatal(err)
 	}
+}
+
+func initStorage(db *sql.DB) {
+	err := db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("DB: successfully connected")
 }
