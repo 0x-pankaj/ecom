@@ -24,7 +24,7 @@ func main() {
 		Net:                  "tcp",
 		AllowNativePasswords: true,
 		ParseTime:            true,
-	})
+	}) //return database string and err if
 
 	// db, err := db.NewSQLStorage(mysql.Config{
 	// 	User:                 "root",
@@ -40,12 +40,12 @@ func main() {
 
 	}
 
-	initStorage(db)
+	initStorage(db) //check database connection
 
 	server := api.NewAPIServer(fmt.Sprintf(":%s", config.Envs.Port), db)
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
-	}
+	} //run server on given port with given database string
 }
 
 func initStorage(db *sql.DB) {

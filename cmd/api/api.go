@@ -23,10 +23,15 @@ func NewAPIServer(addr string, db *sql.DB) *APIServer {
 
 func (s *APIServer) Run() error {
 
+	//gorilla router to handle route
 	router := mux.NewRouter()
+
+	// creating subrouter for simplification
 	subrouter := router.PathPrefix("/api/v1").Subrouter()
 
-	useHandler := user.NewHandler()
+	// creating user handler
+	userStore := user.NewStore(s.db)
+	useHandler := user.NewHandler(userStore)
 	useHandler.RegisterRoutes(subrouter)
 
 	log.Println("server runing on port: 9090")
